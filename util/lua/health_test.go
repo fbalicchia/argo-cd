@@ -62,3 +62,64 @@ func TestLuaHealthScript(t *testing.T) {
 	})
 	assert.Nil(t, err)
 }
+func TestLuaHealthScriptApplications(t *testing.T) {
+	err := filepath.Walk("../../resource_customizations/argoproj.io/Application", func(path string, f os.FileInfo, err error) error {
+		if !strings.Contains(path, "health.lua") {
+			return nil
+		}
+		errors.CheckError(err)
+		dir := filepath.Dir(path)
+		yamlBytes, err := os.ReadFile(dir + "/health_test.yaml")
+		errors.CheckError(err)
+		var resourceTest TestStructure
+		err = yaml.Unmarshal(yamlBytes, &resourceTest)
+		errors.CheckError(err)
+		for i := range resourceTest.Tests {
+			test := resourceTest.Tests[i]
+			t.Run(test.InputPath, func(t *testing.T) {
+				vm := VM{
+					UseOpenLibs: true,
+				}
+				obj := getObj(filepath.Join(dir, test.InputPath))
+				script, _, err := vm.GetHealthScript(obj)
+				errors.CheckError(err)
+				result, err := vm.ExecuteHealthLua(obj, script)
+				errors.CheckError(err)
+				assert.Equal(t, &test.HealthStatus, result)
+			})
+		}
+		return nil
+	})
+	assert.Nil(t, err)
+}
+
+func TestLuaHealthScriptCrossplane(t *testing.T) {
+	err := filepath.Walk("../../resource_customizations/database.aws.crossplane.io/rdsinstance", func(path string, f os.FileInfo, err error) error {
+		if !strings.Contains(path, "health.lua") {
+			return nil
+		}
+		errors.CheckError(err)
+		dir := filepath.Dir(path)
+		yamlBytes, err := os.ReadFile(dir + "/health_test.yaml")
+		errors.CheckError(err)
+		var resourceTest TestStructure
+		err = yaml.Unmarshal(yamlBytes, &resourceTest)
+		errors.CheckError(err)
+		for i := range resourceTest.Tests {
+			test := resourceTest.Tests[i]
+			t.Run(test.InputPath, func(t *testing.T) {
+				vm := VM{
+					UseOpenLibs: true,
+				}
+				obj := getObj(filepath.Join(dir, test.InputPath))
+				script, _, err := vm.GetHealthScript(obj)
+				errors.CheckError(err)
+				result, err := vm.ExecuteHealthLua(obj, script)
+				errors.CheckError(err)
+				assert.Equal(t, &test.HealthStatus, result)
+			})
+		}
+		return nil
+	})
+	assert.Nil(t, err)
+}

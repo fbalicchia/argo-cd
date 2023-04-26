@@ -1,0 +1,18 @@
+tests:
+  - healthStatus:
+      status: Missing
+      message: "Leaf Applications Missing"
+    inputPath: testdata/missingLeafApplications.yaml
+  - healthStatus:
+      status: Healthy
+      message: ""
+    inputPath: testdata/healthyApplication.yaml
+  - healthStatus:
+      status: Healthy
+      message: ""
+    inputPath: testdata/healthyApplication.yaml
+  - healthStatus:
+      status: Unknown
+      message: "Leaf Applications Unknown"
+    inputPath: testdata/UnknownLeafApplications.yaml
+    

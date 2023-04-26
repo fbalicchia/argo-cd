@@ -1,0 +1,100 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: org-148-paas-staging
+  namespace: argocd
+spec:
+  destination:
+    namespace: org-148
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: orgs/org-148/
+    repoURL: https://github.com/fbalicchia/example-repo.git
+    targetRevision: complex-charts
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+status:
+  health:
+    status: Healthy
+  history:
+  - deployStartedAt: "2023-04-26T08:54:21Z"
+    deployedAt: "2023-04-26T08:54:22Z"
+    id: 0
+    revision: 86105018f702057ae3a656bf6334143d438ae9e6
+    source:
+      path: orgs/org-148/
+      repoURL: https://github.com/fbalicchia/example-repo.git
+      targetRevision: complex-charts
+  operationState:
+    finishedAt: "2023-04-26T08:54:22Z"
+    message: successfully synced (all tasks run)
+    operation:
+      initiatedBy:
+        automated: true
+      retry:
+        limit: 5
+      sync:
+        prune: true
+        revision: 86105018f702057ae3a656bf6334143d438ae9e6
+        syncOptions:
+        - CreateNamespace=true
+    phase: Succeeded
+    startedAt: "2023-04-26T08:54:21Z"
+    syncResult:
+      resources:
+      - group: ""
+        hookPhase: Running
+        kind: ConfigMap
+        message: configmap/org-148-config created
+        name: org-148-config
+        namespace: paas-application-staging
+        status: Synced
+        syncPhase: Sync
+        version: v1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/org-148-paas-staging-root created
+        name: org-148-paas-staging-root
+        namespace: argocd
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      revision: 86105018f702057ae3a656bf6334143d438ae9e6
+      source:
+        path: orgs/org-148/
+        repoURL: https://github.com/fbalicchia/example-repo.git
+        targetRevision: complex-charts
+  reconciledAt: "2023-04-26T11:14:07Z"
+  resources:
+  - kind: ConfigMap
+    name: org-148-config
+    namespace: paas-application-staging
+    status: Synced
+    version: v1
+  - group: argoproj.io
+    health:
+      status: Healthy
+    kind: Application
+    name: org-148-paas-staging-root
+    namespace: argocd
+    status: Synced
+    version: v1alpha1
+  sourceType: Directory
+  summary: {}
+  sync:
+    comparedTo:
+      destination:
+        namespace: org-148
+        server: https://kubernetes.default.svc
+      source:
+        path: orgs/org-148/
+        repoURL: https://github.com/fbalicchia/example-repo.git
+        targetRevision: complex-charts
+    revision: 86105018f702057ae3a656bf6334143d438ae9e6
+    status: Synced

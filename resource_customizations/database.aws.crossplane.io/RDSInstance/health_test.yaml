@@ -1,0 +1,9 @@
+tests:
+- healthStatus:
+    status: Healthy
+    message: "RDS is ready and synced"
+  inputPath: testdata/healthy_istance.yaml
+- healthStatus:
+    status: Progressing
+    message: "Waiting for database deletion"
+  inputPath: testdata/deleting_istance.yaml

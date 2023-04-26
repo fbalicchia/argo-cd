@@ -1,0 +1,85 @@
+apiVersion: database.aws.crossplane.io/v1beta1
+kind: RDSInstance
+metadata:
+  name: my-petstore
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    allocatedStorage: 2
+    allowMajorVersionUpgrade: false
+    autoMinorVersionUpgrade: false
+    availabilityZone: eu-west22-1a
+    backupRetentionPeriod: 1
+    caCertificateIdentifier: rds-ca-2019
+    dbInstanceClass: db.t3.micro
+    dbName: master
+    dbParameterGroupName: my-petstore
+    dbSubnetGroupName: org-rds-subnet-group
+    deletionProtection: true
+    enablePerformanceInsights: false
+    engine: postgres
+    licenseModel: postgresql-license
+    masterPasswordSecretRef:
+      key: masterPassword
+      name: rds-instance
+      namespace: my
+    masterUsername: masteruser
+    multiAZ: true
+    port: 5432
+    region: eu-west-1
+    storageEncrypted: true
+    storageType: gp2
+    tags:
+    - key: crossplane-kind
+      value: rdsinstance.database.aws.crossplane.io
+    - key: crossplane-name
+      value: my-petstore
+    - key: crossplane-providerconfig
+      value: crossplane-provider-aws
+    vpcSecurityGroupIds:
+    - sg-xxxxxxxx
+  providerConfigRef:
+    name: crossplane-provider-aws
+  writeConnectionSecretToRef:
+    name: my-metastore-rds-credentials
+    namespace: my
+status:
+  atProvider:
+    dbInstanceArn: arn:aws:rds:eu-west-1:711478212794:db:my-petstore
+    dbInstanceStatus: available
+    dbParameterGroups:
+    - dbParameterGroupName: my-petstore-13
+      parameterApplyStatus: in-sync
+    dbResourceId: db-xyxyxyxyxyyxyxyxyxyxy
+    dbSubnetGroup:
+      dbSubnetGroupDescription: org-rds-subnet-group
+      dbSubnetGroupName: org-rds-subnet-group
+      subnetGroupStatus: Complete
+      subnets:
+      - subnetAvailabilityZone:
+          name: eu-west-1b
+        subnetIdentifier: subnet-xxxxxx
+        subnetStatus: Active
+      - subnetAvailabilityZone:
+          name: eu-west-1a
+        subnetIdentifier: subnet-xxxxxxx
+        subnetStatus: Active
+      vpcId: vpc-xxxxxxx
+    endpoint:
+      address: petstore.c6.eu-west-1.rds.amazonaws.com
+      hostedZoneId: Z29XXXXXXXXX
+      port: 5432
+    optionGroupMemberships:
+    - optionGroupName: default:postgres-13
+      status: in-sync
+    pendingModifiedValues:
+      pendingCloudwatchLogsExports: {}
+    secondaryAvailabilityZone: eu-west-1b
+    vpcSecurityGroups:
+    - status: active
+      vpcSecurityGroupId: sg-aexxxxxx
+  conditions:
+  - lastTransitionTime: "2021-12-03T14:48:09Z"
+    reason: Deleting
+    status: "False"
+    type: Ready
